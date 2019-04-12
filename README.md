@@ -6,7 +6,7 @@ Under continuous endpoints:
 
 The scenarios considered in the R script are:
 
-H0-1.       Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=5^2)
+H0-1.       Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=5^2)<br/>
 H0-2.       Under H0: (mu_a=1, var_a=10^2, mu_p=-0.05, var_p=5^2)
 H0-3.       Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=10^2)
 H0-4.       Under H0: (mu_a=1, var_a=10^2, mu_p=-0.05, var_p=10^2)
