@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1555091756007.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3435670181",
+    "id" : "FCBF5017",
+    "lastKnownWriteTime" : 1555091786,
+    "last_content_update" : 1555091786364,
+    "path" : "~/Dropbox/Side projects/Profile Bayesian/Profile-Bayesian/Bayes function_inloop.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "18,66",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

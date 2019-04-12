@@ -60,3 +60,5 @@ result_H1_1$frequentist_inflate=H1_1
 result_H1_2$frequentist_inflate=H1_2
 result_H1_3$frequentist_inflate=H1_3
 result_H1_4$frequentist_inflate=H1_4
+
+save.image("add frequentist_inflate.Rdata")

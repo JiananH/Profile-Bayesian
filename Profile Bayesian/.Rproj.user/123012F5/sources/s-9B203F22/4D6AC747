@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1555091654406.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4D6AC747",
+    "lastKnownWriteTime" : 1555092304,
+    "last_content_update" : 1555092370451,
+    "path" : "~/Dropbox/Side projects/Profile Bayesian/Profile-Bayesian/freq_alpha_np.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "64,0",
+        "scrollLine" : "38"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
