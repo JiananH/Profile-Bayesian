@@ -25,6 +25,7 @@ library(ggplot2)
 library(ggpubr)
 library(gridExtra)
 library(RBesT)
+library(gridExtra)
 
 ###Continuous endpoints
 #Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep){
@@ -35,7 +36,7 @@ n.samples=10000
 alpha=0.025
 mu_a=1
 var_a=20^2
-mu_p=0.8
+mu_p=0.5
 var_p=20^2
 n_a=1000
 n_p=200
@@ -103,6 +104,21 @@ n_p=200
   data <- data.frame("mean_a"=actual_info[,1],"sd_a"=actual_info[,2],"mean_p"=actual_info[,3],"sd_p"=actual_info[,4],"mixture"=reject_mixture,"minimax"=reject_minimax,"regular"=reject_regular,"freq"=reject_freq)
 
 
-p = ggplot() + 
-    geom_point(data=data,aes(x=mean_a,y=mean_p),color=mixture) + labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis that ",mu[p]," = 0")))
-  
+p1 = ggplot() + 
+    geom_point(data=data,aes(x=mean_a,y=mean_p,color=factor(mixture))) + labs(x = "Adult Mean", y = "Pediatric Mean")+
+  scale_colour_discrete(name="Decision",breaks=c(0,1),labels=c("Fail to reject","Reject")) + ggtitle("Robust Mixture Prior")
+
+p2 = ggplot() + 
+  geom_point(data=data,aes(x=mean_a,y=mean_p,color=factor(freq))) + labs(x = "Adult Mean", y = "Pediatric Mean")+
+  scale_colour_discrete(name="Decision",breaks=c(0,1),labels=c("Fail to reject","Reject")) + ggtitle("Frequentist")
+
+p3 = ggplot() + 
+  geom_point(data=data,aes(x=mean_a,y=mean_p,color=factor(regular))) + labs(x = "Adult Mean", y = "Pediatric Mean")+
+  scale_colour_discrete(name="Decision",breaks=c(0,1),labels=c("Fail to reject","Reject")) + ggtitle("Bayesian")
+
+p4 = ggplot() + 
+  geom_point(data=data,aes(x=mean_a,y=mean_p,color=factor(minimax))) + labs(x = "Adult Mean", y = "Pediatric Mean")+
+  scale_colour_discrete(name="Decision",breaks=c(0,1),labels=c("Fail to reject","Reject")) + ggtitle("Profile Bayesian")
+
+
+grid.arrange(p1,p2,p3,p4,nrow=2)
