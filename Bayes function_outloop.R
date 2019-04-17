@@ -17,6 +17,8 @@
 # H1-2.       Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=15^2)
 # H1-3.       Under H1: (mu_a=1, var_a=10^2, mu_p=1, var_p=10^2)
 # H1-4.       Under H1: (mu_a=1, var_a=10^2, mu_p=1.5, var_p=10^2)
+# H1-5.       Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=20^2)
+# H1-6.       Under H1: (mu_a=1, var_a=10^2, mu_p=1, var_p=20^2)
 
 ###Simulating function###
 set.seed(1000)
@@ -94,7 +96,7 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep){
 
 ###Collecting results
 #3.1 
-intensity=10000
+intensity=5000
 
 ###@ Yaoshi: Suggestion: use same sets of sample sizes across different scenarios.
 
@@ -167,6 +169,17 @@ SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
 result_H1_4=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
 
+#Scenario VI: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=20^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_5=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+
+#Scenario VII: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=1,var_p=20^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_6=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
 
 result_H0_1
 result_H0_2
@@ -177,8 +190,8 @@ result_H1_1
 result_H1_2
 result_H1_3
 result_H1_4
-
-
+result_H1_5
+result_H1_6
 
 save.image("dataout.Rdata")
 
@@ -234,7 +247,7 @@ Bayes_discrete=function(n_a,p_a,n_p,p_p,n.samples,p_target,alpha,rep){
 #Bayes_discrete(n_a=1000,p_a=0.7,n_p=1000,p_p=0.7,n.samples=10^4,p_target=0.5,alpha=0.05,rep=10^4)
 ###Under alternative hypothesis
 #Scenario I: there is treatment effect for pediatric population, computes Type I error
-res_I <- function(x)Bayes_discrete(n_a=1000,p_a=0.7,n_p=x,p_p=0.7,n.samples=10^4,p_target=0.5,alpha=0.05,rep=10^4)
+res_I <- function(x)Bayes_discrete(n_a=1000,p_a=0.6,n_p=x,p_p=0.6,n.samples=10^4,p_target=0.5,alpha=0.05,rep=10^4)
 ss_p=c(1000,800,600,400,200,100,50,25)
 SI=sapply(ss_p,res_I)
 SI_res=do.call(rbind,SI)
