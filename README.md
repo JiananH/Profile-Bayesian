@@ -26,7 +26,7 @@ H1-7.       Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=20^2)<br/>
 H1-8.       Under H1: (mu_a=1, var_a=10^2, mu_p=1, var_p=10^2)<br/>
 H1-9.       Under H1: (mu_a=1, var_a=10^2, mu_p=1.5, var_p=10^2)<br/>
 
-The scenarios considered in the manuscript are:
+The scenarios considered in the manuscript are (will be updated):
 ---
 #H0-3.       Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=10^2)<br/>
 #H1-1.       Under H1: (mu_a=1, var_a=10^2, mu_p=0.5, var_p=20^2)<br/>
