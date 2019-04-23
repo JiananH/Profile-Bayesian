@@ -35,9 +35,9 @@ rep=1000
 n.samples=10000
 alpha=0.025
 mu_a=1
-var_a=20^2
+var_a=10^2
 mu_p=0.5
-var_p=20^2
+var_p=10^2
 n_a=1000
 n_p=200
 
@@ -73,7 +73,7 @@ n_p=200
     theta_minimax=rnorm(n.samples,mu_theta_minimax,sd_theta)
     theta_regular=rnorm(n.samples,mu_theta_regular,sd_theta)
     
-    nm <- mixnorm(adult=c(mean_a, sd_a, sd_a/sqrt(n_a)), sigma=sd_a)
+    nm <- mixnorm(adult=c(1, mean_a, sd_a/sqrt(n_a)), sigma=sd_a)
     rnMix <- robustify(nm, weight=0.1, mean=0, n=1, sigma=sqrt(var_a))
     posterior.sum <- postmix(rnMix, m=mean_p, n=n_p, sigma=sd_p)
     #posterior.sum <- postmix(rnMix, data=data_p)
@@ -86,7 +86,8 @@ n_p=200
     #     theta_mixture[j] <- rnorm(1,posterior.sum[2,2],posterior.sum[3,2])
     #   }
     # }
-    components <- sample(1:2,prob=posterior.sum[1,])
+    
+    components <- sample(1:2,size=n.samples,prob=posterior.sum[1,],replace=TRUE)
     mus <- posterior.sum[2,]
     sds <- posterior.sum[3,]
     theta_mixture <- rnorm(n.samples,mean=mus[components],sd=sds[components])

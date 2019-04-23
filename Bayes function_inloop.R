@@ -8,20 +8,26 @@
 # .	Change weight of non-informative prior from 0.5 to 0.1. 
 # .	Change sample variance to population variance. 
 
-#   Under null hypothesis:
-#   H0-1.       Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=5^2)<br/>
-#   H0-2.       Under H0: (mu_a=1, var_a=10^2, mu_p=-0.05, var_p=5^2)<br/>
-#   H0-3.       Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=10^2)<br/>
-#   H0-4.       Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=20^2)<br/>
+# Under null hypothesis:
 #   
-#   Under alternative hypothesis:
-#   H1-0.       Under H1: (mu_a=1, var_a=10^2, mu_p=0.5, var_p=10^2)<br/>
-#   H1-1.       Under H1: (mu_a=1, var_a=10^2, mu_p=0.5, var_p=20^2)<br/>
-#   H1-2.       Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=20^2)<br/>
-#   H1-3.       Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=15^2)<br/>
-#   H1-4.       Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=10^2)<br/>
-#   H1-5.       Under H1: (mu_a=1, var_a=10^2, mu_p=1, var_p=10^2)<br/>
-#   H1-6.       Under H1: (mu_a=1, var_a=10^2, mu_p=1.5, var_p=10^2)<br/>
+# H0-0. Under H0: (mu_a=1, var_a=10^2, mu_p=-0.05, var_p=5^2)
+# H0-1. Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=5^2)
+# H0-2. Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=10^2)
+# H0-3. Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=15^2)
+# H0-4. Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=20^2)
+# 
+# Under alternative hypothesis:
+#   
+# H1-0. Under H1: (mu_a=1, var_a=10^2, mu_p=0.5, var_p=5^2)
+# H1-1. Under H1: (mu_a=1, var_a=10^2, mu_p=0.5, var_p=10^2)
+# H1-2. Under H1: (mu_a=1, var_a=10^2, mu_p=0.5, var_p=15^2)
+# H1-3. Under H1: (mu_a=1, var_a=10^2, mu_p=0.5, var_p=20^2)
+# H1-4. Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=5^2)
+# H1-5. Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=10^2)
+# H1-6. Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=15^2)
+# H1-7. Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=20^2)
+# H1-8. Under H1: (mu_a=1, var_a=10^2, mu_p=1, var_p=10^2)
+# H1-9. Under H1: (mu_a=1, var_a=10^2, mu_p=1.5, var_p=10^2)
 
 ###Simulating function###
 set.seed(2019)
@@ -52,9 +58,7 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep){
     #minimax
     mu_theta_minimax=mean_p
     #regular
-    #w1=(var_a/n_a)/((var_a/n_a)+(var_p/n_p))
     w1=(n_a/sd_a^2)/(n_a/sd_a^2+n_p/sd_p^2)
-    #w1=1/(n_a/var_a+n_p/var_p)*n_a/var_a
     w2=1-w1
     mu_theta_regular=w2*mean_p+w1*mean_a
     #common sd
@@ -64,7 +68,7 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep){
     theta_minimax=rnorm(n.samples,mu_theta_minimax,sd_theta)
     theta_regular=rnorm(n.samples,mu_theta_regular,sd_theta)
     
-    nm <- mixnorm(adult=c(mean_a, sd_a, sd_a/sqrt(n_a)), sigma=sd_a)
+    nm <- mixnorm(adult=c(1, mean_a, sd_a/sqrt(n_a)), sigma=sd_a)
     rnMix <- robustify(nm, weight=0.1, mean=0, n=1, sigma=sqrt(var_a))
     posterior.sum <- postmix(rnMix, m=mean_p, n=n_p, sigma=sd_p)
     #posterior.sum <- postmix(rnMix, data=data_p)
@@ -77,7 +81,8 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep){
     #     theta_mixture[j] <- rnorm(1,posterior.sum[2,2],posterior.sum[3,2])
     #   }
     # }
-    components <- sample(1:2,prob=posterior.sum[1,])
+    
+    components <- sample(1:2,size=n.samples,prob=posterior.sum[1,],replace=TRUE)
     mus <- posterior.sum[2,]
     sds <- posterior.sum[3,]
     theta_mixture <- rnorm(n.samples,mean=mus[components],sd=sds[components])
@@ -141,48 +146,67 @@ result_H0_4=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minima
 
 ###Under alternative hypothesis
 #Scenario 0: there is treatment effect for pediatric population, computes power
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.5,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
 result_H1_0=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
 
 
 #Scenario I: there is treatment effect for pediatric population, computes power
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.5,var_p=20^2,n.samples=intensity,alpha=0.025,rep=intensity)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
 result_H1_1=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
 
 #Scenario II: there is treatment effect for pediatric population, computes power
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=20^2,n.samples=intensity,alpha=0.025,rep=intensity)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.5,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
 result_H1_2=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
 
 #Scenario III: there is treatment effect for pediatric population, computes power
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.5,var_p=20^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
 result_H1_3=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
 
 
 #Scenario IV: there is treatment effect for pediatric population, computes power
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
 result_H1_4=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
 
 #Scenario V: there is treatment effect for pediatric population, computes power
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=1,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
 result_H1_5=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
 
+
 #Scenario VI: there is treatment effect for pediatric population, computes power
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=1.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
 result_H1_6=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+
+#Scenario VII: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=20^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_7=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+
+#Scenario VIII: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=1,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_8=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+
+#Scenario IX: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=1.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_9=data.table(SampleSize_a_p=list_sample_size,mixture=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
 
 result_H0_0
 result_H0_1
@@ -196,6 +220,9 @@ result_H1_3
 result_H1_4
 result_H1_5
 result_H1_6
+result_H1_7
+result_H1_8
+result_H1_9
 
 save.image("datain.Rdata")
 
