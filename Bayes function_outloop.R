@@ -43,9 +43,11 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep){
   reject_mixture=reject_minimax=reject_regular=reject_freq=double(rep)
   
   #simulate adult data
+  set.seed(25)
   data_a=rnorm(n_a,mu_a,sqrt(var_a))
   sd_a=sqrt(var_a)
   mean_a=mean(data_a)
+  mean_a
   for (i in 1:rep){
 
     
