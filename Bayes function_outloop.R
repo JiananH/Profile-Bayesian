@@ -45,7 +45,8 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep){
   #simulate adult data
   set.seed(25)
   data_a=rnorm(n_a,mu_a,sqrt(var_a))
-  sd_a=sqrt(var_a)
+  sd_a=sd(data_a)
+  #sd_a=sqrt(var_a)
   mean_a=mean(data_a)
   mean_a
   for (i in 1:rep){
@@ -55,7 +56,8 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep){
     #n_p=ceiling(p*n_a)
     data_p=rnorm(n_p,mu_p,sqrt(var_p))
     mean_p=mean(data_p)
-    sd_p=sqrt(var_p)
+    #sd_p=sqrt(var_p)
+    sd_p=sd(data_p)
     
     #simulate parameter of interest theta
     #minimax
@@ -74,7 +76,8 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep){
     theta_regular=rnorm(n.samples,mu_theta_regular,sd_theta)
     
     nm <- mixnorm(adult=c(1, mean_a, sd_a/sqrt(n_a)), sigma=sd_a)
-    rnMix <- robustify(nm, weight=0.1, mean=0, n=1, sigma=sqrt(var_a))
+    #rnMix <- robustify(nm, weight=0.1, mean=0, n=1, sigma=sqrt(var_a))
+    rnMix <- robustify(nm, weight=0.1, mean=0, n=1, sigma=sd_a)
     posterior.sum <- postmix(rnMix, m=mean_p, n=n_p, sigma=sd_p)
     #posterior.sum <- postmix(rnMix, data=data_p)
     # indicator <- runif(n.samples) <= posterior.sum[1,1]
@@ -227,7 +230,7 @@ result_H1_7
 result_H1_8
 result_H1_9
 
-save.image("dataout.Rdata")
+save.image("dataoutsd.Rdata")
 
 
 
