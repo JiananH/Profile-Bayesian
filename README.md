@@ -41,7 +41,8 @@ In addition, illustration plot for rejection region and hypothetical power are g
 
 ###5/2/2019###
 
-Four outputs are added:
+Four outputs are added:<br/>
+
 conditional_dataout_half_19: condition: hat(mu_p)>1/2*hat(mu_a), with 0.1 on non-informative prior<br/>
 conditional_dataout_half_55: condition: hat(mu_p)>1/2*hat(mu_a), with 0.5 on non-informative prior<br/>
 conditional_dataout_one_19: condition: hat(mu_p)>1*hat(mu_a), with 0.1 on non-informative prior<br/>
