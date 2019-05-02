@@ -38,3 +38,11 @@ The scenarios considered in the manuscript are (will be updated):
 #H1-6.       Under H1: (mu_a=1, var_a=10^2, mu_p=1.5, var_p=10^2)<br/>
 ---
 In addition, illustration plot for rejection region and hypothetical power are going to be included.
+
+###5/2/2019###
+
+Four outputs are added:
+conditional_dataout_half_19: condition: hat(mu_p)>1/2*hat(mu_a), with 0.1 on non-informative prior<br/>
+conditional_dataout_half_55: condition: hat(mu_p)>1/2*hat(mu_a), with 0.5 on non-informative prior<br/>
+conditional_dataout_one_19: condition: hat(mu_p)>1*hat(mu_a), with 0.1 on non-informative prior<br/>
+conditional_dataout_one_55: condition: hat(mu_p)>1*hat(mu_a), with 0.5 on non-informative prior<br/>
