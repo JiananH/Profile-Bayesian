@@ -1,4 +1,4 @@
-# H1-9. Under H1: (mu_a=1, var_a=10^2, mu_p=2, var_p=10^2)
+# H1-10. Under H1: (mu_a=1, var_a=10^2, mu_p=2, var_p=10^2)
 > result_H1_10_1
    SampleSize_a_p mixture minimax regular frequentist
 1:      1000,1000   1.000   1.000       1       1.000
