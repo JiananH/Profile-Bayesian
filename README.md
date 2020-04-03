@@ -38,6 +38,7 @@ H1-10.       Under H1: (mu_a=1, var_a=10^2, mu_p=2, var_p=10^2)<br/>
 #H1-5.       Under H1: (mu_a=1, var_a=10^2, mu_p=1, var_p=10^2)<br/>
 #H1-6.       Under H1: (mu_a=1, var_a=10^2, mu_p=1.5, var_p=10^2)<br/>
 ---
+
 In addition, illustration plot for rejection region and hypothetical power are going to be included.
 
 ###5/5/2019###
