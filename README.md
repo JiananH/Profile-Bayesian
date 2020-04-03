@@ -65,7 +65,7 @@ H00-3.       Under H0: (mu_a=1, var_a=7^2, mu_p=0, var_p=10^2)<br/>
 Under alternative hypothesis:
 
 H11-1.       Under H1: (mu_a=1, var_a=7^2, mu_p=0.8, var_p=7^2)<br/>
-H11-2.       Under H1: (mu_a=1, var_a=7^2, mu_p=2, var_p=7^2)<br/>
+H11-2.       Under H1: (mu_a=1, var_a=7^2, mu_p=1, var_p=7^2)<br/>
 H11-3.       Under H1: (mu_a=1, var_a=7^2, mu_p=1.5, var_p=7^2)<br/>
 
 2. Varying r, which is the proportion of effect size pediatric over effect size adult.
@@ -83,5 +83,5 @@ H00-3.       Under H0: (mu_a=1, var_a=7^2, mu_p=0, var_p=10^2)<br/>
 Under alternative hypothesis:
 
 H11-1.       Under H1: (mu_a=1, var_a=7^2, mu_p=0.8, var_p=7^2)<br/>
-H11-2.       Under H1: (mu_a=1, var_a=7^2, mu_p=2, var_p=7^2)<br/>
+H11-2.       Under H1: (mu_a=1, var_a=7^2, mu_p=1, var_p=7^2)<br/>
 H11-3.       Under H1: (mu_a=1, var_a=7^2, mu_p=1.5, var_p=7^2)<br/>
