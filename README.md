@@ -72,7 +72,7 @@ H11-3.       Under H1: (mu_a=1, var_a=7^2, mu_p=1.5, var_p=7^2)<br/>
 
 r=0, 0.25, 0.5, 0.65, 0.8, 1
 
-Fix adult sample size at 100 and pediatric sample size at 600
+Fix adult sample size at 1000 and pediatric sample size at 600.
 
 Under null hypothesis:
 
