@@ -625,3 +625,9 @@ p14
 
 
 dev.off()
+
+
+library(ggpubr)
+ggarrange(p13, p11, p9, p7, ncol=2, nrow=2, common.legend = TRUE, legend="bottom")
+
+ggarrange(p14, p12, p10, p8, ncol=2, nrow=2, common.legend = TRUE, legend="bottom")

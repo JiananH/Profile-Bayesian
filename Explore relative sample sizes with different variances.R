@@ -204,7 +204,8 @@ VaryR_H11_3=data.table(r=r_gamma,mixture55=SI_res[,1],mixture91=SI_res[,2],minim
 
 #Rendering plots
 library(ggplot2)
-pdf("VaryNVaryR-Images.pdf")
+#pdf("VaryNVaryR-Images.pdf")
+png("VaryN_null_1.png",height = 500,width = 800)
 VaryN_H00_1$ss_p=c(500,400,300,200,100,50,25)
 data_wide=VaryN_H00_1
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
@@ -214,7 +215,7 @@ p1 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
   #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
-  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis that ",mu[p]," = 0 and ",sigma[p]," = 5")))+
+  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis: ",mu[p]," = 0 and ",sigma[p]," = 5")))+
   # theme(
   #   legend.position = c(.95, .95),
   #   legend.justification = c("right", "top"),
@@ -224,8 +225,9 @@ p1 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   # theme(legend.position="right","top")+
   scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w = 0.5)","Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist"))
 p1
+dev.off()
 
-
+png("VaryN_null_2.png",height = 500,width = 800)
 VaryN_H00_2$ss_p=c(500,400,300,200,100,50,25)
 data_wide=VaryN_H00_2
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
@@ -235,7 +237,7 @@ p2 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
   #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
-  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis that ",mu[p]," = 0 and ",sigma[p]," = 7")))+
+  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis: ",mu[p]," = 0 and ",sigma[p]," = 7")))+
   # theme(
   #   legend.position = c(.95, .95),
   #   legend.justification = c("right", "top"),
@@ -245,7 +247,9 @@ p2 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   # theme(legend.position="right","top")+
   scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w = 0.5)","Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist"))
 p2
+dev.off()
 
+png("VaryN_null_3.png",height = 500,width = 800)
 VaryN_H00_3$ss_p=c(500,400,300,200,100,50,25)
 data_wide=VaryN_H00_3
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
@@ -255,7 +259,7 @@ p3 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
   #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
-  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis that ",mu[p]," = 0 and ",sigma[p]," = 10")))+
+  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis: ",mu[p]," = 0 and ",sigma[p]," = 10")))+
   # theme(
   #   legend.position = c(.95, .95),
   #   legend.justification = c("right", "top"),
@@ -265,8 +269,10 @@ p3 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   # theme(legend.position="right","top")+
   scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w = 0.5)","Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist"))
 p3
+dev.off()
 
 #alternative
+png("VaryN_alt_1.png",height = 500,width = 800)
 VaryN_H11_1$ss_p=c(500,400,300,200,100,50,25)
 data_wide=VaryN_H11_1
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
@@ -276,7 +282,7 @@ p4 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
   #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
-  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis that ",mu[p]," = 0.8 and ",sigma[p]," = 7")))+
+  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis: ",mu[p]," = 0.8 and ",sigma[p]," = 7")))+
   # theme(
   #   legend.position = c(.95, .05),
   #   legend.justification = c("right", "bottom"),
@@ -286,7 +292,9 @@ p4 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   # theme(legend.position="right","top")+
   scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w = 0.5)","Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist"))
 p4
+dev.off()
 
+png("VaryN_alt_1.png",height = 500,width = 800)
 VaryN_H11_2$ss_p=c(500,400,300,200,100,50,25)
 data_wide=VaryN_H11_2
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
@@ -296,7 +304,7 @@ p5 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
   #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
-  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis that ",mu[p]," = 1 and ",sigma[p]," = 7")))+
+  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis: ",mu[p]," = 1 and ",sigma[p]," = 7")))+
   # theme(
   #   legend.position = c(.95, .05),
   #   legend.justification = c("right", "bottom"),
@@ -306,8 +314,9 @@ p5 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   # theme(legend.position="right","top")+
   scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w = 0.5)","Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist"))
 p5
+dev.off()
 
-
+png("VaryN_alt_1.png",height = 500,width = 800)
 VaryN_H11_3$ss_p=c(500,400,300,200,100,50,25)
 data_wide=VaryN_H11_3
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
@@ -317,7 +326,7 @@ p6 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
   #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
-  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis that ",mu[p]," = 1.5 and ",sigma[p]," = 7")))+
+  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis: ",mu[p]," = 1.5 and ",sigma[p]," = 7")))+
   # theme(
   #   legend.position = c(.95, .05),
   #   legend.justification = c("right", "bottom"),
@@ -327,7 +336,7 @@ p6 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
   # theme(legend.position="right","top")+
   scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w = 0.5)","Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist"))
 p6
-
+dev.off()
 
 ###Rendering plots for r
 
@@ -372,4 +381,8 @@ p8 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   scale_colour_discrete(name="Method",breaks=c(1,2,3),labels=c("Mean = 0.8","Mean = 1","Mean = 1.5"))
 p8
 
-dev.off()
+#dev.off()
+library(ggpubr)
+ggarrange(p1, p2, p3, ncol=3, common.legend = TRUE, legend="bottom")
+
+ggarrange(p4, p5, p6, ncol=3, common.legend = TRUE, legend="bottom")
