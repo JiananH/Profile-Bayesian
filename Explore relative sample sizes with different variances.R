@@ -294,7 +294,7 @@ p4 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
 p4
 dev.off()
 
-png("VaryN_alt_1.png",height = 500,width = 800)
+png("VaryN_alt_2.png",height = 500,width = 800)
 VaryN_H11_2$ss_p=c(500,400,300,200,100,50,25)
 data_wide=VaryN_H11_2
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
@@ -316,7 +316,7 @@ p5 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
 p5
 dev.off()
 
-png("VaryN_alt_1.png",height = 500,width = 800)
+png("VaryN_alt_3.png",height = 500,width = 800)
 VaryN_H11_3$ss_p=c(500,400,300,200,100,50,25)
 data_wide=VaryN_H11_3
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
