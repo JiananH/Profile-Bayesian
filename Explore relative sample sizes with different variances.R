@@ -39,7 +39,7 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep,gamm
   mean_a=mean(data_a)
   mean_a
   for (i in 1:rep){
-
+    
     #simulate pediatric data
     #n_p=ceiling(p*n_a)
     data_p=rnorm(n_p,mu_p,sqrt(var_p))
@@ -226,8 +226,8 @@ p1 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
 p1
 
 
-VaryN_H00_1$ss_p=c(500,400,300,200,100,50,25)
-data_wide=VaryN_H00_1
+VaryN_H00_2$ss_p=c(500,400,300,200,100,50,25)
+data_wide=VaryN_H00_2
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
 data$SampleSize_a_p=NULL
 data$time=factor(data$time)
@@ -268,7 +268,7 @@ p3
 
 #alternative
 VaryN_H11_1$ss_p=c(500,400,300,200,100,50,25)
-data_wide=VaryN_H00_1
+data_wide=VaryN_H11_1
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
 data$SampleSize_a_p=NULL
 data$time=factor(data$time)
