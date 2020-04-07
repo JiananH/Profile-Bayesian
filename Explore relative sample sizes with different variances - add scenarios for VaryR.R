@@ -477,7 +477,7 @@ data$time=factor(data$time)
 p7 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
-  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
   labs(x = "r", y = "Type I Error", title = "Adult sample size = 1000 and Pediatric sample size = 600")+
   # theme(
   #   legend.position = c(.95, .95),
@@ -486,7 +486,7 @@ p7 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   #   legend.margin = margin(6, 6, 6, 6)
   # )+
   # theme(legend.position="right","top")+
-  scale_colour_discrete(name="Method",breaks=c(1,2,3),labels=c("Sigma = 5","Sigma = 7","Sigma = 10"))
+  scale_colour_discrete(name="Standard deviation",breaks=c(1,2,3),labels=c("Sigma = 5","Sigma = 7","Sigma = 10"))
 p7
 
 
@@ -505,7 +505,7 @@ p8 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   #   legend.margin = margin(6, 6, 6, 6)
   # )+
   # theme(legend.position="right","top")+
-  scale_colour_discrete(name="Method",breaks=c(1,2,3),labels=c("Mean = 0.8","Mean = 1","Mean = 1.5"))
+  scale_colour_discrete(name="Mean",breaks=c(1,2,3),labels=c("Mean = 0.8","Mean = 1","Mean = 1.5"))
 p8
 
 ###Pediatric sample size = 400
@@ -515,7 +515,7 @@ data$time=factor(data$time)
 p9 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
-  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
   labs(x = "r", y = "Type I Error", title = "Adult sample size = 1000 and Pediatric sample size = 400")+
   # theme(
   #   legend.position = c(.95, .95),
@@ -524,7 +524,7 @@ p9 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   #   legend.margin = margin(6, 6, 6, 6)
   # )+
   # theme(legend.position="right","top")+
-  scale_colour_discrete(name="Method",breaks=c(1,2,3),labels=c("Sigma = 5","Sigma = 7","Sigma = 10"))
+  scale_colour_discrete(name="Standard deviation",breaks=c(1,2,3),labels=c("Sigma = 5","Sigma = 7","Sigma = 10"))
 p9
 
 
@@ -543,7 +543,7 @@ p10 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   #   legend.margin = margin(6, 6, 6, 6)
   # )+
   # theme(legend.position="right","top")+
-  scale_colour_discrete(name="Method",breaks=c(1,2,3),labels=c("Mean = 0.8","Mean = 1","Mean = 1.5"))
+  scale_colour_discrete(name="Mean",breaks=c(1,2,3),labels=c("Mean = 0.8","Mean = 1","Mean = 1.5"))
 p10
 
 ###Pediatric sample size = 200
@@ -553,7 +553,7 @@ data$time=factor(data$time)
 p11 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
-  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
   labs(x = "r", y = "Type I Error", title = "Adult sample size = 1000 and Pediatric sample size = 200")+
   # theme(
   #   legend.position = c(.95, .95),
@@ -562,7 +562,7 @@ p11 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   #   legend.margin = margin(6, 6, 6, 6)
   # )+
   # theme(legend.position="right","top")+
-  scale_colour_discrete(name="Method",breaks=c(1,2,3),labels=c("Sigma = 5","Sigma = 7","Sigma = 10"))
+  scale_colour_discrete(name="Standard deviation",breaks=c(1,2,3),labels=c("Sigma = 5","Sigma = 7","Sigma = 10"))
 p11
 
 
@@ -581,7 +581,7 @@ p12 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   #   legend.margin = margin(6, 6, 6, 6)
   # )+
   # theme(legend.position="right","top")+
-  scale_colour_discrete(name="Method",breaks=c(1,2,3),labels=c("Mean = 0.8","Mean = 1","Mean = 1.5"))
+  scale_colour_discrete(name="Mean",breaks=c(1,2,3),labels=c("Mean = 0.8","Mean = 1","Mean = 1.5"))
 p12
 
 
@@ -592,7 +592,7 @@ data$time=factor(data$time)
 p13 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   geom_line()+
   geom_point()+
-  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
   labs(x = "r", y = "Type I Error", title = "Adult sample size = 1000 and Pediatric sample size = 100")+
   # theme(
   #   legend.position = c(.95, .95),
@@ -601,7 +601,7 @@ p13 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   #   legend.margin = margin(6, 6, 6, 6)
   # )+
   # theme(legend.position="right","top")+
-  scale_colour_discrete(name="Method",breaks=c(1,2,3),labels=c("Sigma = 5","Sigma = 7","Sigma = 10"))
+  scale_colour_discrete(name="Standard deviation",breaks=c(1,2,3),labels=c("Sigma = 5","Sigma = 7","Sigma = 10"))
 p13
 
 
@@ -620,7 +620,7 @@ p14 = ggplot(data=data,aes(x=r,y=Value,group=time,color=time))+
   #   legend.margin = margin(6, 6, 6, 6)
   # )+
   # theme(legend.position="right","top")+
-  scale_colour_discrete(name="Method",breaks=c(1,2,3),labels=c("Mean = 0.8","Mean = 1","Mean = 1.5"))
+  scale_colour_discrete(name="Mean",breaks=c(1,2,3),labels=c("Mean = 0.8","Mean = 1","Mean = 1.5"))
 p14
 
 
