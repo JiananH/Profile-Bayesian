@@ -148,15 +148,15 @@ VaryN_H11_3=data.table(SampleSize_a_p=list_sample_size,mixture55=SI_res[,1],mixt
 # 
 # Under null hypothesis:
 #   
-# H00-1. Under H0: (mu_a=1, var_a=7^2, mu_p=0, var_p=5^2)
-# H00-2. Under H0: (mu_a=1, var_a=7^2, mu_p=0, var_p=7^2)
-# H00-3. Under H0: (mu_a=1, var_a=7^2, mu_p=0, var_p=10^2)
+# H00-1. Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=5^2)
+# H00-2. Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=10^2)
+# H00-3. Under H0: (mu_a=1, var_a=10^2, mu_p=0, var_p=15^2)
 # 
 # Under alternative hypothesis:
 #   
-# H11-1. Under H1: (mu_a=1, var_a=7^2, mu_p=0.8, var_p=7^2)
-# H11-2. Under H1: (mu_a=1, var_a=7^2, mu_p=2, var_p=7^2)
-# H11-3. Under H1: (mu_a=1, var_a=7^2, mu_p=1.5, var_p=7^2)
+# H11-1. Under H1: (mu_a=1, var_a=10^2, mu_p=0.8, var_p=10^2)
+# H11-2. Under H1: (mu_a=1, var_a=10^2, mu_p=2, var_p=10^2)
+# H11-3. Under H1: (mu_a=1, var_a=10^2, mu_p=1.5, var_p=10^2)
 
 r_gamma = c(0,0.25,0.5,0.65,0.8,1)
 intensity=5000
@@ -164,19 +164,19 @@ intensity=5000
 #Under null hypothesis
 
 # H00-1
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=1000,n_p=600,mu_p=0,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=600,mu_p=0,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
 VaryR_H00_1=data.table(r=r_gamma,mixture55=SI_res[,1],mixture91=SI_res[,2],minimax=SI_res[,3],regular=SI_res[,4],frequentist=SI_res[,5])
 
 # H00-2
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=1000,n_p=600,mu_p=0,var_p=7^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=600,mu_p=0,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
 VaryR_H00_2=data.table(r=r_gamma,mixture55=SI_res[,1],mixture91=SI_res[,2],minimax=SI_res[,3],regular=SI_res[,4],frequentist=SI_res[,5])
 
 # H00-3
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=1000,n_p=600,mu_p=0,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=600,mu_p=0,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
 VaryR_H00_3=data.table(r=r_gamma,mixture55=SI_res[,1],mixture91=SI_res[,2],minimax=SI_res[,3],regular=SI_res[,4],frequentist=SI_res[,5])
@@ -184,19 +184,19 @@ VaryR_H00_3=data.table(r=r_gamma,mixture55=SI_res[,1],mixture91=SI_res[,2],minim
 #Under alternative hypothesis
 
 # H11-1
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=1000,n_p=600,mu_p=0.8,var_p=7^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=600,mu_p=0.8,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
 VaryR_H11_1=data.table(r=r_gamma,mixture55=SI_res[,1],mixture91=SI_res[,2],minimax=SI_res[,3],regular=SI_res[,4],frequentist=SI_res[,5])
 
 # H11-2
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=1000,n_p=600,mu_p=1,var_p=7^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=600,mu_p=1,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
 VaryR_H11_2=data.table(r=r_gamma,mixture55=SI_res[,1],mixture91=SI_res[,2],minimax=SI_res[,3],regular=SI_res[,4],frequentist=SI_res[,5])
 
 # H11-3
-res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=1000,n_p=600,mu_p=1.5,var_p=7^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=600,mu_p=1.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
 VaryR_H11_3=data.table(r=r_gamma,mixture55=SI_res[,1],mixture91=SI_res[,2],minimax=SI_res[,3],regular=SI_res[,4],frequentist=SI_res[,5])

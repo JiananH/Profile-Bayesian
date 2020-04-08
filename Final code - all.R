@@ -1,22 +1,8 @@
-######################################################################
-####  New simulation settings to accomondate reviewer's comments  ####
-####                  Jianan Hui, Apr 7, 2020                     ####
-######################################################################
+#########################################################################
+#### Functions used for Inference from Adult to Pediatric data FINAL ####
+####                         Jianan Hui                              ####
+#########################################################################
 
-# Varying relative sample sizes (ratio of the two sample sizes from adult to pediatric). Specifically, add scenarios where adult sample size = 500 and pediatric sample size varies from 500, 400, 300, 200, 100, 50 and 25.
-# The following assumptions will be adopted:
-#   n_a=500,n_p=500,400,300,200,100,50,25 
-# Under null hypothesis:
-#   
-# H00-1. Under H0: (mu_a=1, var_a=7^2, mu_p=0, var_p=5^2)
-# H00-2. Under H0: (mu_a=1, var_a=7^2, mu_p=0, var_p=7^2)
-# H00-3. Under H0: (mu_a=1, var_a=7^2, mu_p=0, var_p=10^2)
-# 
-# Under alternative hypothesis:
-#   
-# H11-1. Under H1: (mu_a=1, var_a=7^2, mu_p=0.8, var_p=7^2)
-# H11-2. Under H1: (mu_a=1, var_a=7^2, mu_p=2, var_p=7^2)
-# H11-3. Under H1: (mu_a=1, var_a=7^2, mu_p=1.5, var_p=7^2)
 
 setwd("/Users/jianan/Dropbox/Side projects/Profile Bayesian/Profile-Bayesian/")
 ###Simulating function###
@@ -39,7 +25,7 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep,gamm
   mean_a=mean(data_a)
   mean_a
   for (i in 1:rep){
-
+    
     #simulate pediatric data
     #n_p=ceiling(p*n_a)
     data_p=rnorm(n_p,mu_p,sqrt(var_p))
@@ -98,6 +84,90 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep,gamm
   
 }
 
+intensity=100
+list_sample_size=list(c(1000,1000),c(1000,800),c(1000,600),c(1000,400),c(1000,200),c(1000,100),c(1000,50),c(1000,25))
+
+###Under null hypothesis
+#Scenario 0: there is no treatment effect for pediatric population, computes Type I error
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=-0.05,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H0_0=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+#Scenario I: there is no treatment effect for pediatric population, computes Type I error
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H0_1=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+
+#Scenario II: there is no treatment effect for pediatric population, computes Type I error
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H0_2=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+
+#Scenario III: there is no treatment effect for pediatric population, computes Type I error
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity)
+
+### investigating on small sample sizes of pediatric data
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H0_3=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+#Scenario I: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_1=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+
+#Scenario IV: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_4=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+#Scenario V: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_5=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+
+#Scenario VI: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_6=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+#Scenario VIII: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=1,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_8=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+#Scenario IX: there is treatment effect for pediatric population, computes power
+res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=x[1],n_p=x[2],mu_p=1.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
+SI=lapply(list_sample_size,res_I)
+SI_res=do.call(rbind,SI)
+result_H1_9=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
+
+result_H0.1 <- result_H0_0
+result_H0.2 <- result_H0_1
+result_H0.3 <- result_H0_2
+result_H0.4 <- result_H0_3
+result_H0.5 <- result_H1_1
+
+result_H1.1 <- result_H1_4
+result_H1.2 <- result_H1_5
+result_H1.3 <- result_H1_6
+result_H1.4 <- result_H1_8
+result_H1.5 <- result_H1_9
+
+####Simulation to address comments on Vary N and Vary R
 
 intensity=5000
 list_sample_size=list(c(500,500),c(500,400),c(500,300),c(500,200),c(500,100),c(500,50),c(500,25))
@@ -107,39 +177,39 @@ list_sample_size=list(c(500,500),c(500,400),c(500,300),c(500,200),c(500,100),c(5
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=x[1],n_p=x[2],mu_p=0,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
-VaryN_H00_1=data.table(SampleSize_a_p=list_sample_size,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryN_H00_1=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
 
 #Scenario II: there is no treatment effect for pediatric population, computes Type I error
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=x[1],n_p=x[2],mu_p=0,var_p=7^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
-VaryN_H00_2=data.table(SampleSize_a_p=list_sample_size,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryN_H00_2=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
 
 
 #Scenario III: there is no treatment effect for pediatric population, computes Type I error
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=x[1],n_p=x[2],mu_p=0,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
-VaryN_H00_3=data.table(SampleSize_a_p=list_sample_size,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryN_H00_3=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
 
 ###Under alternative hypothesis
 #Scenario I: there is treatment effect for pediatric population, computes power
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=x[1],n_p=x[2],mu_p=0.8,var_p=7^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
-VaryN_H11_1=data.table(SampleSize_a_p=list_sample_size,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryN_H11_1=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
 
 #Scenario II: there is treatment effect for pediatric population, computes power
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=x[1],n_p=x[2],mu_p=1,var_p=7^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
-VaryN_H11_2=data.table(SampleSize_a_p=list_sample_size,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryN_H11_2=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
 
 #Scenario III: there is treatment effect for pediatric population, computes power
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=7^2,n_a=x[1],n_p=x[2],mu_p=1.5,var_p=7^2,n.samples=intensity,alpha=0.025,rep=intensity)
 SI=lapply(list_sample_size,res_I)
 SI_res=do.call(rbind,SI)
-VaryN_H11_3=data.table(SampleSize_a_p=list_sample_size,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryN_H11_3=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4],mixture55=SI_res[,5])
 
 # Varying r, which is the proportion of effect size p over effect size a.
 # r=0, 0.25, 0.5, 0.65, 0.8, 1
@@ -156,6 +226,7 @@ VaryN_H11_3=data.table(SampleSize_a_p=list_sample_size,mixture55=SI_res[,5],mixt
 # H11-2. Under H1: (mu_a=1, var_a=10^2, mu_p=2, var_p=10^2)
 # H11-3. Under H1: (mu_a=1, var_a=10^2, mu_p=1.5, var_p=10^2)
 
+
 r_gamma <- c(0,0.25,0.5,0.65,0.8,1)
 intensity <- 5000
 
@@ -167,19 +238,19 @@ n_pp <- n_p[1]
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_1<- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_1<- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H00-2
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_2 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_2 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H00-3
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_3 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 #Under alternative hypothesis
 
@@ -187,19 +258,19 @@ VaryR_H00_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],mi
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0.8,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_1 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_1 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H11-2
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=1,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_2 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_2 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H11-3
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=1.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_3 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 VaryR_600_H00_all <- data.frame("r"=VaryR_H00_1$r,"H00-1"=VaryR_H00_1$minimax,"H00-2"=VaryR_H00_2$minimax,"H00-3"=VaryR_H00_3$minimax)
 VaryR_600_H11_all <- data.frame("r"=VaryR_H11_1$r,"H00-1"=VaryR_H11_1$minimax,"H00-2"=VaryR_H11_2$minimax,"H00-3"=VaryR_H11_3$minimax)
@@ -210,19 +281,19 @@ n_pp <- n_p[2]
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_1<- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_1<- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H00-2
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_2 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_2 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H00-3
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_3 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 #Under alternative hypothesis
 
@@ -230,19 +301,19 @@ VaryR_H00_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],mi
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0.8,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_1 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_1 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H11-2
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=1,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_2 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_2 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H11-3
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=1.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_3 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 VaryR_400_H00_all <- data.frame("r"=VaryR_H00_1$r,"H00-1"=VaryR_H00_1$minimax,"H00-2"=VaryR_H00_2$minimax,"H00-3"=VaryR_H00_3$minimax)
 VaryR_400_H11_all <- data.frame("r"=VaryR_H11_1$r,"H00-1"=VaryR_H11_1$minimax,"H00-2"=VaryR_H11_2$minimax,"H00-3"=VaryR_H11_3$minimax)
@@ -252,23 +323,22 @@ VaryR_400_H11_all <- data.frame("r"=VaryR_H11_1$r,"H00-1"=VaryR_H11_1$minimax,"H
 ####
 n_pp <- n_p[3]
 # H00-1
-# H00-1
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_1<- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_1<- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H00-2
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_2 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_2 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H00-3
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_3 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 #Under alternative hypothesis
 
@@ -276,19 +346,19 @@ VaryR_H00_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],mi
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0.8,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_1 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_1 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H11-2
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=1,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_2 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_2 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H11-3
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=1.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_3 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 VaryR_200_H00_all <- data.frame("r"=VaryR_H00_1$r,"H00-1"=VaryR_H00_1$minimax,"H00-2"=VaryR_H00_2$minimax,"H00-3"=VaryR_H00_3$minimax)
 VaryR_200_H11_all <- data.frame("r"=VaryR_H11_1$r,"H00-1"=VaryR_H11_1$minimax,"H00-2"=VaryR_H11_2$minimax,"H00-3"=VaryR_H11_3$minimax)
@@ -301,19 +371,19 @@ n_pp <- n_p[4]
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=5^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_1<- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_1<- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H00-2
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_2 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_2 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H00-3
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0,var_p=15^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H00_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H00_3 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 #Under alternative hypothesis
 
@@ -321,31 +391,245 @@ VaryR_H00_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],mi
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=0.8,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_1 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_1 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H11-2
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=1,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_2 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_2 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 # H11-3
 res_I <- function(x)Bayes_continuous(mu_a=1,var_a=10^2,n_a=1000,n_p=n_pp,mu_p=1.5,var_p=10^2,n.samples=intensity,alpha=0.025,rep=intensity,gamma = x)
 SI <- sapply(r_gamma,res_I)
 SI_res <- t(SI)
-VaryR_H11_3 <- data.table(r=r_gamma,mixture55=SI_res[,5],mixture91=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,4])
+VaryR_H11_3 <- data.table(r=r_gamma,mixture19=SI_res[,1],minimax=SI_res[,2],regular=SI_res[,3],frequentist=SI_res[,5],mixture55=SI_res[,1])
 
 VaryR_100_H00_all <- data.frame("r"=VaryR_H00_1$r,"H00-1"=VaryR_H00_1$minimax,"H00-2"=VaryR_H00_2$minimax,"H00-3"=VaryR_H00_3$minimax)
 VaryR_100_H11_all <- data.frame("r"=VaryR_H11_1$r,"H00-1"=VaryR_H11_1$minimax,"H00-2"=VaryR_H11_2$minimax,"H00-3"=VaryR_H11_3$minimax)
 
 ####
-save.image("VaryNVaryR_adding more sample sizes for VaryR_change variance.RData")
+save.image("FinalData.RData")
 
-#Rendering plots
+#######################
+####Rendering plots####
+#######################
+
+
+####Producing plots for the main simulation section
+#producing plots
 library(ggplot2)
-#pdf("VaryNVaryR-Images.pdf")
+
+result_H0.1$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H0.1
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p1 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis that ",mu[p]," = -0.05 and ",sigma[p]," = 5")))+
+  # theme(
+  #   legend.position = c(.95, .95),
+  #   legend.justification = c("right", "top"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p1
+
+result_H0.2$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H0.2
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p2 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis that ",mu[p]," = 0 and ",sigma[p]," = 5")))+
+  # theme(
+  #   legend.position = c(.95, .95),
+  #   legend.justification = c("right", "top"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p2
+
+result_H0.3$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H0.3
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p3 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis that ",mu[p]," = 0 and ",sigma[p]," = 10")))+
+  # theme(
+  #   legend.position = c(.95, .95),
+  #   legend.justification = c("right", "top"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p3
+
+result_H0.4$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H0.4
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p4 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis that ",mu[p]," = 0 and ",sigma[p]," = 15")))+
+  # theme(
+  #   legend.position = c(.95, .95),
+  #   legend.justification = c("right", "top"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p4
+
+result_H0.5$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H0.5
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p5 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Type I Error", title = expression(paste("Under null hypothesis that ",mu[p]," = 0.5 and ",sigma[p]," = 10")))+
+  # theme(
+  #   legend.position = c(.95, .95),
+  #   legend.justification = c("right", "top"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p5
+
+
+#alternative
+result_H1.1$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H1.1
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p6 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis that ",mu[p]," = 0.8 and ",sigma[p]," = 5")))+
+  # theme(
+  #   legend.position = c(.95, .05),
+  #   legend.justification = c("right", "bottom"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p6
+
+result_H1.2$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H1.2
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p7 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis that ",mu[p]," = 0.8 and ",sigma[p]," = 10")))+
+  # theme(
+  #   legend.position = c(.95, .05),
+  #   legend.justification = c("right", "bottom"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p7
+
+result_H1.3$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H1.3
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p8 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis that ",mu[p]," = 0.8 and ",sigma[p]," = 15")))+
+  # theme(
+  #   legend.position = c(.95, .05),
+  #   legend.justification = c("right", "bottom"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p8
+
+result_H1.4$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H1.4
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p9 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis that ",mu[p]," = 1 and ",sigma[p]," = 10")))+
+  # theme(
+  #   legend.position = c(.95, .05),
+  #   legend.justification = c("right", "bottom"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p9
+
+result_H1.5$ss_p=c(1000,800,600,400,200,100,50,25)
+data_wide=result_H1.5
+data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
+data$SampleSize_a_p=NULL
+data$time=factor(data$time)
+p10 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
+  geom_line()+
+  geom_point()+
+  #geom_hline(yintercept=0.025,linetype="dashed",color="darkgrey")+
+  labs(x = "Pediatric Sample size", y = "Power", title = expression(paste("Under alternative hypothesis that ",mu[p]," = 1.5 and ",sigma[p]," = 10")))+
+  # theme(
+  #   legend.position = c(.95, .05),
+  #   legend.justification = c("right", "bottom"),
+  #   legend.box.just = "right",
+  #   legend.margin = margin(6, 6, 6, 6)
+  # )+
+  # theme(legend.position="right","top")+
+  scale_colour_discrete(name="Method",breaks=c(1,2,3,4,5),labels=c("Robust mixture prior (w=0.9)","Profile Bayesian","Regular Bayesian","Frequentist","Robust mixture prior (w=0.5)"))
+p10
+
+
+library(ggpubr)
+ggarrange(p2, p3, p4, p5, ncol=2, nrow=2, common.legend = TRUE, legend="bottom")
+ggarrange(p6, p8, p9, p10, ncol=2, nrow=2, common.legend = TRUE, legend="bottom")
+
+
+####Producing plots for the discussion and addressing comments for Vary N and Vary R
 VaryN_H00_1$ss_p=c(500,400,300,200,100,50,25)
-VaryN_H00_1=VaryN_H00_1[,c("SampleSize_a_p","mixture91","minimax","regular","frequentist","mixture55","ss_p")]
 data_wide=VaryN_H00_1
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
 data$SampleSize_a_p=NULL
@@ -367,7 +651,6 @@ p1
 
 
 VaryN_H00_2$ss_p=c(500,400,300,200,100,50,25)
-VaryN_H00_2=VaryN_H00_2[,c("SampleSize_a_p","mixture91","minimax","regular","frequentist","mixture55","ss_p")]
 data_wide=VaryN_H00_2
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
 data$SampleSize_a_p=NULL
@@ -389,7 +672,6 @@ p2
 
 VaryN_H00_3$ss_p=c(500,400,300,200,100,50,25)
 data_wide=VaryN_H00_3
-VaryN_H00_3=VaryN_H00_3[,c("SampleSize_a_p","mixture91","minimax","regular","frequentist","mixture55","ss_p")]
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
 data$SampleSize_a_p=NULL
 data$time=factor(data$time)
@@ -410,7 +692,6 @@ p3
 
 #alternative
 VaryN_H11_1$ss_p=c(500,400,300,200,100,50,25)
-VaryN_H11_1=VaryN_H11_1[,c("SampleSize_a_p","mixture91","minimax","regular","frequentist","mixture55","ss_p")]
 data_wide=VaryN_H11_1
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
 data$SampleSize_a_p=NULL
@@ -431,7 +712,6 @@ p4 = ggplot(data=data,aes(x=ss_p,y=Value,group=time,color=time))+
 p4
 
 VaryN_H11_2$ss_p=c(500,400,300,200,100,50,25)
-VaryN_H11_2=VaryN_H11_2[,c("SampleSize_a_p","mixture91","minimax","regular","frequentist","mixture55","ss_p")]
 data_wide=VaryN_H11_2
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
 data$SampleSize_a_p=NULL
@@ -453,7 +733,6 @@ p5
 
 
 VaryN_H11_3$ss_p=c(500,400,300,200,100,50,25)
-VaryN_H11_3=VaryN_H11_3[,c("SampleSize_a_p","mixture91","minimax","regular","frequentist","mixture55","ss_p")]
 data_wide=VaryN_H11_3
 data=reshape(data_wide,direction="long",varying=list(names(data_wide)[2:6]),v.names="Value",idvar="ss_p")
 data$SampleSize_a_p=NULL
