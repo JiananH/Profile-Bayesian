@@ -84,7 +84,7 @@ Bayes_continuous=function(mu_a,var_a,n_a,n_p,mu_p,var_p,n.samples,alpha,rep,gamm
   
 }
 
-intensity=100
+intensity=5000
 list_sample_size=list(c(1000,1000),c(1000,800),c(1000,600),c(1000,400),c(1000,200),c(1000,100),c(1000,50),c(1000,25))
 
 ###Under null hypothesis
@@ -169,7 +169,6 @@ result_H1.5 <- result_H1_9
 
 ####Simulation to address comments on Vary N and Vary R
 
-intensity=5000
 list_sample_size=list(c(500,500),c(500,400),c(500,300),c(500,200),c(500,100),c(500,50),c(500,25))
 
 ###Under null hypothesis
@@ -228,7 +227,6 @@ VaryN_H11_3=data.table(SampleSize_a_p=list_sample_size,mixture19=SI_res[,1],mini
 
 
 r_gamma <- c(0,0.25,0.5,0.65,0.8,1)
-intensity <- 5000
 
 n_p <- c(600,400,200,100)
 #Under null hypothesis
